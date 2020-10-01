@@ -18,20 +18,25 @@ public class NorthPartitioner implements Partitioner {
         List<PartitionInfo> partitions = cluster.partitionsForTopic(topic);
         int numPartitions = partitions.size();
 
-        if ((keyBytes == null) || (!(key instanceof String))) {  // Only expect String keys, so we throw an exception if that is not the case.
-            throw new IllegalArgumentException("We expect all messages to have customer name as key");
+        // Only expect String keys, so we throw an exception if that is not the case.
+        if ((keyBytes == null) || (!(key instanceof String))) {
+            throw new IllegalArgumentException(
+                    "We expect all messages to have customer name as key");
         }
 
-        if (numPartitions>1) {
-            if (((String) key).equals("north")) {  // north will always go to last partition
+        // north will always go to last partition
+        if (numPartitions > 1) {
+            if (((String) key).equals("north")) {
                 return numPartitions - 1;
             }
             // Other records will get hashed to the rest of the partitions
             return (Math.abs(Utils.murmur2(keyBytes)) % (numPartitions - 1));
-        } else
+        } else {
             return partitions.get(0).partition();
+        }
     }
 
     public void close() {
     }
+
 }

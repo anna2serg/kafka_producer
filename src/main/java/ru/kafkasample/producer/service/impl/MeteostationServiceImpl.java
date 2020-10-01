@@ -22,7 +22,10 @@ public class MeteostationServiceImpl implements MeteostationService {
 
     @Override
     public void send(String key, MeteoStationDto dto) {
+        //Synchronous messaging
         //kafkaTemplate.send(topicName, key, dto);
+
+        //Asynchronous message sending
         ListenableFuture<SendResult<String, MeteoStationDto>> future =
                 kafkaTemplate.send(topicName, key, dto);
         future.addCallback(result -> log.info("<- successfully sent {} ", dto),

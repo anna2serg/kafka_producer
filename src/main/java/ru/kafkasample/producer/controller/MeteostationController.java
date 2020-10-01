@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kafkasample.producer.dto.MeteoStationDto;
+import ru.kafkasample.producer.dto.ResponseDto;
 import ru.kafkasample.producer.service.MeteostationService;
 
 @RestController
@@ -18,9 +19,9 @@ public class MeteostationController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/{key}")
-    public String send(@PathVariable String key, @RequestBody MeteoStationDto dto) {
+    public ResponseDto send(@PathVariable String key, @RequestBody MeteoStationDto dto) {
         service.send(key, dto);
-        return "Ok";
+        return ResponseDto.createOkResponse();
     }
 
 }
